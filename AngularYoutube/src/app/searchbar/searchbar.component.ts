@@ -19,7 +19,7 @@ export class SearchbarComponent {
 
   ngOnInit() {
     this.videoURL = new FormGroup({ url: new FormControl()});
-    //In order to check uf entered url is already in db
+    //In order to check if entered url is already in db
     this._potentiallyaddurl.findallURL().subscribe(data => {
       this.urls = data;});
   }
@@ -43,5 +43,6 @@ export class SearchbarComponent {
     }
     //Add submission to history
     this._potentiallyaddurl.addCurrentURLtoHistory(urlValue).subscribe(data => console.log(data));
+    window.location.reload()
   }
 }

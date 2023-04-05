@@ -62,11 +62,16 @@ app.post("/addurl", function (req, res) {
 app.post("/addurlhistory", function (req, res) {
   var url = req.body.url;
   var timestamp = req.body.timestamp;
-  console.log("in2");
   var sqlRequest = "INSERT INTO url_history (url_history_time, url_video_url)"
       + "VALUES (to_timestamp($2 / 1000.0), $1)"
       + " RETURNING url_history_id";
     values = [url, timestamp];
+  getSQLResult(req, res, sqlRequest, values);
+});
+
+app.post("/getlasturlfromhistory", function (req, res) {
+  var sqlRequest = "SELECT url_video_url FROM url_history ORDER BY url_history_time DESC LIMIT 1";
+  var values = [];
   getSQLResult(req, res, sqlRequest, values);
 });
 
