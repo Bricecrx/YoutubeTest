@@ -10,13 +10,13 @@
                 <form (ngSubmit)="playVideo()">
                     <div [formGroup]="videoURL">
                         <div class="form-group row">
-                            <label for="urlLabel" class="col-1 col-form-label">URL</label>
+                            <label for="urlLabel" class="col-1 col-form-label text-right">URL</label>
                             <div class="col-9">
-                                <input type="text" class="form-control" id="inputurl" placeholder="url" name="url"
+                                <input type="text" class="form-control" id="inputurl" placeholder="enter video url here" name="url"
                                     required="required" formControlName="url">
                             </div>
-                            <div class="col-2">
-                                <button type="submit" class="btn btn-success">Search</button>
+                            <div class="col-2 text-left">
+                                <button type="submit" class="custombtn btn btn-success">Search</button>
                             </div>
                         </div>
                     </div>
