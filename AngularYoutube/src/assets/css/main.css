@@ -6,6 +6,12 @@ tr{
 	background-color:white;
 }
 
+td.error{
+	font-size: large;
+	font-weight: bold;
+	color: red;
+}
+
 div.header{
 	background-color:royalblue;
 	color:white;
