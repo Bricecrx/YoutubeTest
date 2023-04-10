@@ -111,6 +111,12 @@ app.post("/deleteBookmark", function (req, res) {
   getSQLResult(req, res, sqlRequest, values);
 });
 
+app.post("/findAllHistoriesLimit10", function (req, res) {
+  var sqlRequest = "SELECT * FROM url_history ORDER BY url_history_time DESC LIMIT 10 ";
+  var values = [];
+  getSQLResult(req, res, sqlRequest, values);
+});
+
 // Must be LAST instruction of the file
 // Listen to port 8000
 app.listen(8000, () => {
