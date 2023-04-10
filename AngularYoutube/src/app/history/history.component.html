@@ -1,5 +1,14 @@
-<h2>History</h2>
-<tr *ngFor="let history of histories">
-    <td><button name="edit" class="btn" (click)="joinFromHistory($event, history)">{{ history.url_video_url }}</button></td>
-    <td>{{ history.url_history_time }}</td>
-</tr>
+<div class="py-1">
+    <div class="container text-center">
+        <h2>History</h2>
+        <tr>
+            <td>url</td>
+            <td>timestamp</td>
+        </tr>
+        <tr *ngFor="let history of histories">
+            <td><button name="edit" class="btn" (click)="joinFromHistory($event, history)">{{ history.url_video_url
+                    }}</button></td>
+            <td>{{ history.url_history_time }}</td>
+        </tr>
+    </div>
+</div>
