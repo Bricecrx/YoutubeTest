@@ -53,9 +53,9 @@ app.post("/geturls", function (req, res) {
 app.post("/addurl", function (req, res) {
   var url = req.body.url;
   var sqlRequest = "INSERT INTO url_video (url_video_url, url_video_bookmark)"
-      + "VALUES ($1, false)"
-      + " RETURNING url_video_url";
-    values = [url];
+    + "VALUES ($1, false)"
+    + " RETURNING url_video_url";
+  values = [url];
   getSQLResult(req, res, sqlRequest, values);
 });
 
@@ -63,15 +63,51 @@ app.post("/addurlhistory", function (req, res) {
   var url = req.body.url;
   var timestamp = req.body.timestamp;
   var sqlRequest = "INSERT INTO url_history (url_history_time, url_video_url)"
-      + "VALUES (to_timestamp($2 / 1000.0), $1)"
-      + " RETURNING url_history_id";
-    values = [url, timestamp];
+    + "VALUES (to_timestamp($2 / 1000.0), $1)"
+    + " RETURNING url_history_id";
+  values = [url, timestamp];
   getSQLResult(req, res, sqlRequest, values);
 });
 
 app.post("/getlasturlfromhistory", function (req, res) {
   var sqlRequest = "SELECT url_video_url FROM url_history ORDER BY url_history_time DESC LIMIT 1";
   var values = [];
+  getSQLResult(req, res, sqlRequest, values);
+});
+
+app.post("/addToFavourite", function (req, res) {
+  var url = req.body.url;
+  var sqlRequest = "";
+  var values = [];
+  sqlRequest = "UPDATE url_video SET"
+    + " url_video_bookmark= true"
+    + " WHERE url_video_url=$1"
+    + " RETURNING url_video_url";
+  values = [url];
+  getSQLResult(req, res, sqlRequest, values);
+});
+
+app.post("/findAllFavourites", function (req, res) {
+  var sqlRequest = "SELECT url_video_url FROM url_video WHERE url_video_bookmark = true";
+  var values = [];
+  getSQLResult(req, res, sqlRequest, values);
+});
+
+app.post("/countFavourites", function (req, res) {
+  var sqlRequest = "SELECT COUNT(url_video_url) FROM url_video WHERE url_video_bookmark = true";
+  var values = [];
+  getSQLResult(req, res, sqlRequest, values);
+});
+
+app.post("/deleteBookmark", function (req, res) {
+  var url = req.body.url;
+  var sqlRequest = "";
+  var values = [];
+  sqlRequest = "UPDATE url_video SET"
+    + " url_video_bookmark= false"
+    + " WHERE url_video_url=$1"
+    + " RETURNING url_video_url";
+  values = [url];
   getSQLResult(req, res, sqlRequest, values);
 });
 

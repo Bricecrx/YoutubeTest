@@ -1,2 +1,5 @@
 <h2> Video Playing </h2>
 <youtube-player [videoId]="videoId"> </youtube-player>
+<form (ngSubmit)="addFavourite()">
+    <button type="submit" class="btn btn-success"><img src="assets/icons/star.png" alt="star" class="icon" /></button>
+</form>

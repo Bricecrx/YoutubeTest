@@ -1,6 +1,7 @@
 import { Component, NgIterable } from '@angular/core';
 import { FindvideourlService } from '../findvideourl.service';
 import { Router } from '@angular/router';
+import { FavouritegestionService } from '../favouritegestion.service';
 
 @Component({
   selector: 'app-videoview',
@@ -10,12 +11,13 @@ import { Router } from '@angular/router';
 export class VideoviewComponent {
 
   apiLoaded = false;
-
+  fullURL = '';
   videoId = '';
   latesturl: NgIterable<any>;
 
-  constructor(private _findvideourl: FindvideourlService, private router: Router) {
+  constructor(private _findvideourl: FindvideourlService, private _favouritegestion: FavouritegestionService, private router: Router) {
     this.videoId = '';
+    this.fullURL = '';
     this.latesturl = new Array();
   }
 
@@ -24,9 +26,9 @@ export class VideoviewComponent {
     this._findvideourl.findlastURLFromHistory().subscribe(data => {
       this.latesturl = data;
       for (var late of this.latesturl) {
-        var fullURL = late.url_video_url;
+        this.fullURL = late.url_video_url;
         //process to get id only : 
-        this.videoId = fullURL.split("v=")[1];
+        this.videoId = this.fullURL.split("v=")[1];
       }
       console.log(this.latesturl);
     });
@@ -37,5 +39,10 @@ export class VideoviewComponent {
       document.body.appendChild(tag);
       this.apiLoaded = true;
     }
+  }
+
+  addFavourite(): void {
+    this._favouritegestion.addToFavourite(this.fullURL).subscribe(data => console.log(data));
+    window.location.reload();
   }
 }

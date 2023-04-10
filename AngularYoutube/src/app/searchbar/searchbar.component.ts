@@ -43,6 +43,6 @@ export class SearchbarComponent {
     }
     //Add submission to history
     this._potentiallyaddurl.addCurrentURLtoHistory(urlValue).subscribe(data => console.log(data));
-    window.location.reload()
+    window.location.reload();
   }
 }

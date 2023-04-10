@@ -1,1 +1,9 @@
-<p>bookmarks works!</p>
+<h2>Bookmarks</h2>
+<p> Number of bookmarks : {{bookmarkCount}}</p>
+<tr *ngFor="let bookmark of bookmarks">
+    <td><button name="edit" class="btn" (click)="joinFromBookmark($event, bookmark)">{{ bookmark.url_video_url }}</button></td>
+    <td class="text-center">
+        <button name="edit" class="btn" (click)="deleteBookmark($event, bookmark)"><img src="assets/icons/delete.png"
+                alt="delete" class="icon" /></button>
+    </td>
+</tr>
