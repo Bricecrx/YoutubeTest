@@ -6,8 +6,7 @@
             <td>timestamp</td>
         </tr>
         <tr *ngFor="let history of histories">
-            <td><button name="edit" class="btn" (click)="joinFromHistory($event, history)">{{ history.url_video_url
-                    }}</button></td>
+            <td><button name="edit" class="btn" (click)="joinFromHistory($event, history)">{{ history.url_video_url}}</button></td>
             <td>{{ history.url_history_time }}</td>
         </tr>
     </div>

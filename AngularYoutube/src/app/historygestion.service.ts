@@ -6,10 +6,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class HistorygestionService {
+  //Gets to the emplacement of the servor
   private _serverURL = 'http://localhost:8000';
 
+  //Empty constructor
   constructor(private _httpClient: HttpClient) { }
 
+  //Send a request to get the last 10 addings to the history table
   findAllHistoriesLimit10(): Observable<any> {
     //We use a crappy object
     var theObject = {"ok" : 0};

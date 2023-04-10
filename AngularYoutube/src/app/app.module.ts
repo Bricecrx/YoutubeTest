@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
+  //Declaration of all components created
   declarations: [
     AppComponent,
     SearchbarComponent,
@@ -21,6 +22,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     BookmarksComponent,
     MainpageComponent
   ],
+  //Imports of all libraries used to run the app
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -30,6 +32,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     YouTubePlayerModule
   ],
   providers: [],
+  //Use of bootstrap on all app
   bootstrap: [AppComponent]
 })
 export class AppModule { }

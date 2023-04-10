@@ -2,9 +2,7 @@
     <div class="container text-center">
         <h2> Video Playing </h2>
         <youtube-player [videoId]="videoId"> </youtube-player>
-        <form (ngSubmit)="addFavourite()">
-            <button type="submit" class="btn btn-success"><img src="assets/icons/star.png" alt="star"
-                    class="icon" /></button>
-        </form>
+        <td><button name="edit" class="btn" (click)="addFavourite($event)"><img src="assets/icons/star.png" alt="star"
+            class="icon" /></button></td>
     </div>
 </div>
