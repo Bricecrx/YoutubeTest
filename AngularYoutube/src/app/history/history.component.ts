@@ -1,6 +1,6 @@
 import { Component, NgIterable } from '@angular/core';
 import { FavouritegestionService } from '../favouritegestion.service';
-import { PotentiallyaddurlService } from '../potentiallyaddurl.service';
+import { UrlgestionService } from '../urlgestion.service';
 import { Router } from '@angular/router';
 import { HistorygestionService } from '../historygestion.service';
 
@@ -12,7 +12,7 @@ import { HistorygestionService } from '../historygestion.service';
 export class HistoryComponent {
   histories: NgIterable<any>;
 
-  constructor(private _historygestion: HistorygestionService, private _potentiallyaddurl : PotentiallyaddurlService,private router: Router) {
+  constructor(private _historygestion: HistorygestionService, private _urlgestion : UrlgestionService) {
     this.histories = new Array();
   }
 
@@ -25,7 +25,7 @@ export class HistoryComponent {
 
   joinFromHistory(event:Event, history:any) {
     var url = history.url_video_url;
-    this._potentiallyaddurl.addCurrentURLtoHistory(url).subscribe(data => console.log(data));
+    this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => console.log(data));
     window.location.reload();
   }
 }

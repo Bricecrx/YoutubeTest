@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FindvideourlService } from './findvideourl.service';
+import { UrlgestionService } from './urlgestion.service';
 
-describe('FindvideourlService', () => {
-  let service: FindvideourlService;
+describe('UrlgestionService', () => {
+  let service: UrlgestionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FindvideourlService);
+    service = TestBed.inject(UrlgestionService);
   });
 
   it('should be created', () => {

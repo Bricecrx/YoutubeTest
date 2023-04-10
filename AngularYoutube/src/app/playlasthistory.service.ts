@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class FindvideourlService {
+export class PlaylasthistoryService {
   private _serverURL = 'http://localhost:8000';
 
   constructor(private _httpClient: HttpClient) { }

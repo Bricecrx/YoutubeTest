@@ -1,7 +1,7 @@
 import { Component, NgIterable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PotentiallyaddurlService } from '../potentiallyaddurl.service';
+import { UrlgestionService } from '../urlgestion.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -12,7 +12,7 @@ export class SearchbarComponent {
   videoURL: FormGroup;
   urls: NgIterable<any>;
 
-  constructor(private _potentiallyaddurl : PotentiallyaddurlService, private router: Router) {
+  constructor(private _urlgestion : UrlgestionService) {
     this.videoURL = new FormGroup({ url: new FormControl()});
     this.urls = new Array();
   }
@@ -20,7 +20,7 @@ export class SearchbarComponent {
   ngOnInit() {
     this.videoURL = new FormGroup({ url: new FormControl()});
     //In order to check if entered url is already in db
-    this._potentiallyaddurl.findallURL().subscribe(data => {
+    this._urlgestion.findallURL().subscribe(data => {
       this.urls = data;});
   }
 
@@ -39,10 +39,10 @@ export class SearchbarComponent {
     }
     //If it is not, add it to dB
     if (!isAlreadyInDB) {
-      this._potentiallyaddurl.addURL(urlValue).subscribe(data => console.log(data));
+      this._urlgestion.addURL(urlValue).subscribe(data => console.log(data));
     }
     //Add submission to history
-    this._potentiallyaddurl.addCurrentURLtoHistory(urlValue).subscribe(data => console.log(data));
+    this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => console.log(data));
     window.location.reload();
   }
 }

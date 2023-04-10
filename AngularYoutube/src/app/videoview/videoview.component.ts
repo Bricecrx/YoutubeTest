@@ -1,5 +1,5 @@
 import { Component, NgIterable } from '@angular/core';
-import { FindvideourlService } from '../findvideourl.service';
+import { PlaylasthistoryService } from '../playlasthistory.service';
 import { Router } from '@angular/router';
 import { FavouritegestionService } from '../favouritegestion.service';
 
@@ -15,7 +15,7 @@ export class VideoviewComponent {
   videoId = '';
   latesturl: NgIterable<any>;
 
-  constructor(private _findvideourl: FindvideourlService, private _favouritegestion: FavouritegestionService, private router: Router) {
+  constructor(private _playlasthistory: PlaylasthistoryService, private _favouritegestion: FavouritegestionService, private router: Router) {
     this.videoId = '';
     this.fullURL = '';
     this.latesturl = new Array();
@@ -23,7 +23,7 @@ export class VideoviewComponent {
 
   ngOnInit() {
     //Get latest url in history (so latest submitted)
-    this._findvideourl.findlastURLFromHistory().subscribe(data => {
+    this._playlasthistory.findlastURLFromHistory().subscribe(data => {
       this.latesturl = data;
       for (var late of this.latesturl) {
         this.fullURL = late.url_video_url;

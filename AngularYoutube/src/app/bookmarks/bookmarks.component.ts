@@ -1,7 +1,7 @@
 import { Component, NgIterable } from '@angular/core';
 import { FavouritegestionService } from '../favouritegestion.service';
 import { Router } from '@angular/router';
-import { PotentiallyaddurlService } from '../potentiallyaddurl.service';
+import { UrlgestionService } from '../urlgestion.service';
 
 @Component({
   selector: 'app-bookmarks',
@@ -12,7 +12,7 @@ export class BookmarksComponent {
   bookmarks: NgIterable<any>;
   bookmarkCount : 0;
 
-  constructor(private _favouritegestion: FavouritegestionService, private _potentiallyaddurl : PotentiallyaddurlService,private router: Router) {
+  constructor(private _favouritegestion: FavouritegestionService, private _urlgestion : UrlgestionService) {
     this.bookmarks = new Array();
     this.bookmarkCount = 0;
   }
@@ -35,7 +35,7 @@ export class BookmarksComponent {
 
   joinFromBookmark(event:Event, bookmark:any) {
     var url = bookmark.url_video_url;
-    this._potentiallyaddurl.addCurrentURLtoHistory(url).subscribe(data => console.log(data));
+    this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => console.log(data));
     window.location.reload();
   }
 }
