@@ -12,7 +12,7 @@ export class HistoryComponent {
   histories: NgIterable<any>;
 
   //Initializes services and variables
-  constructor(private _historygestion: HistorygestionService, private _urlgestion : UrlgestionService) {
+  constructor(private _historygestion: HistorygestionService, private _urlgestion: UrlgestionService) {
     this.histories = new Array();
   }
 
@@ -21,11 +21,15 @@ export class HistoryComponent {
     //Get latest url in history (so latest submitted)
     this._historygestion.findAllHistoriesLimit10().subscribe(data => {
       this.histories = data;
+      //Making the timestamps more easily readable for human eye
+      for (var history of this.histories) {
+       history.url_history_time = history.url_history_time.split("Z")[0].split("T")[0] + " " + history.url_history_time.split("Z")[0].split("T")[1];
+      }
     });
   }
 
   //Allows to play a video when clicking on the history entry url
-  joinFromHistory(event:Event, history:any) {
+  joinFromHistory(event: Event, history: any) {
     var url = history.url_video_url;
     this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => data);
     window.location.reload();
