@@ -8,7 +8,7 @@ var conString = 'postgres://admin:admin@localhost:5432/YoutubeTest';
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Default to accept all requests
+// Default to accept all requests (CORS policy)
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
