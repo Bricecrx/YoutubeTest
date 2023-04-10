@@ -32,22 +32,10 @@ td.centered {
 	text-align:center;
 }
 
-th{
-	background-color:yellowgreen;
-	color:white;
-}
-
 .main {
     display: table-cell;
     margin-left: auto;
     margin-right: auto;
-}
-
-h1 {
-	margin: 0 0 10px;
-	font-size: 20px;
-	font-weight: bold;
-	color:green;
 }
 
 p {
