@@ -1,0 +1,26 @@
+
+CREATE TABLE public.url_video (
+                url_video_url VARCHAR NOT NULL,
+                url_video_bookmark BOOLEAN NOT NULL,
+                CONSTRAINT url_video_id PRIMARY KEY (url_video_url)
+);
+
+
+CREATE SEQUENCE public.url_history_url_history_id_seq;
+
+CREATE TABLE public.url_history (
+                url_history_id INTEGER NOT NULL DEFAULT nextval('public.url_history_url_history_id_seq'),
+                url_history_time TIMESTAMP NOT NULL,
+                url_video_url VARCHAR NOT NULL,
+                CONSTRAINT url_history_id PRIMARY KEY (url_history_id)
+);
+
+
+ALTER SEQUENCE public.url_history_url_history_id_seq OWNED BY public.url_history.url_history_id;
+
+ALTER TABLE public.url_history ADD CONSTRAINT url_video_url_history_fk
+FOREIGN KEY (url_video_url)
+REFERENCES public.url_video (url_video_url)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
