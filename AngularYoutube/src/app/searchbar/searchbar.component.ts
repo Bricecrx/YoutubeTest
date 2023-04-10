@@ -1,6 +1,5 @@
 import { Component, NgIterable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { UrlgestionService } from '../urlgestion.service';
 
 @Component({
@@ -44,10 +43,11 @@ export class SearchbarComponent {
     }
     //If it is not, add it to dB
     if (!isAlreadyInDB) {
-      this._urlgestion.addURL(urlValue).subscribe(data => console.log(data));
+      this._urlgestion.addURL(urlValue).subscribe(data => data);
     }
     //Then add submission to history
-    this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => console.log(data));
+    this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => data);
+    //Refresh page
     window.location.reload();
   }
 }

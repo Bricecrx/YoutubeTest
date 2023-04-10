@@ -1,6 +1,5 @@
 import { Component, NgIterable } from '@angular/core';
 import { FavouritegestionService } from '../favouritegestion.service';
-import { Router } from '@angular/router';
 import { UrlgestionService } from '../urlgestion.service';
 
 @Component({
@@ -35,14 +34,14 @@ export class BookmarksComponent {
   //Onclick of delete button near a bookmark, delete the bookmark from the list and reload webpage
   deleteBookmark(event:Event, bookmark:any) {
     var url = bookmark.url_video_url;
-    this._favouritegestion.deleteBookmark(url).subscribe(data => console.log(data));
+    this._favouritegestion.deleteBookmark(url).subscribe(data => data);
     window.location.reload();
   }
 
   //Allows to play a video when clicking on the bookmark url
   joinFromBookmark(event:Event, bookmark:any) {
     var url = bookmark.url_video_url;
-    this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => console.log(data));
+    this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => data);
     window.location.reload();
   }
 }

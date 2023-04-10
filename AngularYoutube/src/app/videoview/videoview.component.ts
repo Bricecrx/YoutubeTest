@@ -1,6 +1,5 @@
 import { Component, NgIterable } from '@angular/core';
 import { PlaylasthistoryService } from '../playlasthistory.service';
-import { Router } from '@angular/router';
 import { FavouritegestionService } from '../favouritegestion.service';
 
 @Component({
@@ -19,7 +18,7 @@ export class VideoviewComponent {
   latesturl: NgIterable<any>;
 
   //Initializes services and variables
-  constructor(private _playlasthistory: PlaylasthistoryService, private _favouritegestion: FavouritegestionService, private router: Router) {
+  constructor(private _playlasthistory: PlaylasthistoryService, private _favouritegestion: FavouritegestionService) {
     this.videoId = '';
     this.fullURL = '';
     this.latesturl = new Array();
@@ -32,6 +31,7 @@ export class VideoviewComponent {
     this._playlasthistory.findlastURLFromHistory().subscribe(data => {
       this.latesturl = data;
       for (var late of this.latesturl) {
+        //save full url into a variable
         this.fullURL = late.url_video_url;
         //process to get id only : 
         this.videoId = this.fullURL.split("v=")[1];
@@ -49,7 +49,7 @@ export class VideoviewComponent {
 
   //When clicking on the star button below the video player, add the current played video to bookmarks
   addFavourite(event:Event): void {
-    this._favouritegestion.addToFavourite(this.fullURL).subscribe(data => console.log(data));
+    this._favouritegestion.addToFavourite(this.fullURL).subscribe(data => data);
     window.location.reload();
   }
 }

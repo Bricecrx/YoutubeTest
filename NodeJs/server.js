@@ -3,7 +3,7 @@ const pg = require("pg");
 const app = express();
 
 //Connection to dB
-var conString = 'postgres://Brice_crx:Jeanchopper666@localhost:5432/YoutubeTest';
+var conString = 'postgres://admin:admin@localhost:5432/YoutubeTest';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

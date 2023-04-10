@@ -1,7 +1,5 @@
 import { Component, NgIterable } from '@angular/core';
-import { FavouritegestionService } from '../favouritegestion.service';
 import { UrlgestionService } from '../urlgestion.service';
-import { Router } from '@angular/router';
 import { HistorygestionService } from '../historygestion.service';
 
 @Component({
@@ -29,7 +27,7 @@ export class HistoryComponent {
   //Allows to play a video when clicking on the history entry url
   joinFromHistory(event:Event, history:any) {
     var url = history.url_video_url;
-    this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => console.log(data));
+    this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => data);
     window.location.reload();
   }
 }
