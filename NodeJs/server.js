@@ -102,13 +102,6 @@ app.post("/findAllFavourites", function (req, res) {
   getSQLResult(req, res, sqlRequest, values);
 });
 
-//Count the number of bookmarked urls
-app.post("/countFavourites", function (req, res) {
-  var sqlRequest = "SELECT COUNT(url_video_url) FROM url_video WHERE url_video_bookmark = true";
-  var values = [];
-  getSQLResult(req, res, sqlRequest, values);
-});
-
 //Update the url_video table so a given url stops to be a bookmark
 app.post("/deleteBookmark", function (req, res) {
   var url = req.body.url;

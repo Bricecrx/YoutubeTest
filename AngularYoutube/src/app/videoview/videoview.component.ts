@@ -1,6 +1,7 @@
 import { Component, NgIterable, Input } from '@angular/core';
-import { PlaylasthistoryService } from '../playlasthistory.service';
 import { FavouritegestionService } from '../favouritegestion.service';
+import { HistorygestionService } from '../historygestion.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-videoview',
@@ -13,26 +14,28 @@ export class VideoviewComponent {
   //url of the video to play in full form
   fullURL: string = '';
   //id of the video to play (useful to play the video thanks to youtube iframe api)
-  videoId: string = '';
-  //The last url added to history (so the one the app has to play)
-  latesturl: {url_video_url : string}[] = new Array();
+  videoId: string[] = new Array();
+  //Subscriber to get latest url from history
+  videoIdSub : Subscription = new Subscription();
 
   //Initializes services and variables
-  constructor(private _playlasthistory: PlaylasthistoryService, private _favouritegestion: FavouritegestionService) {
+  constructor(private _favouritegestion: FavouritegestionService, private _historygestion: HistorygestionService) {
   }
 
   //On loading, search for the url of the video to play and enter it into the variable that 
   //the module will use + initializes the youtube iframe module
   ngOnInit() {
-    //Get latest url in history (so latest submitted) and copy it into variables
-    this._playlasthistory.findlastURLFromHistory().subscribe(data => {
+    //Get the latest history submission thanks to subscribtion and service
+    this.videoIdSub = this._historygestion.lastHistoryId.subscribe((data) => {
       console.log(data);
-      this.latesturl = data;
-        this.fullURL = this.latesturl[0].url_video_url;
-        //process to get id only : 
-        this.videoId = this.fullURL.split("v=")[1];
+      this.videoId = data;
     });
-    
+    //Get latest url in history (so latest submitted) and copy it into variables
+    this._historygestion.findlastURLFromHistory().subscribe(data => {
+      console.log(data[0].url_video_url);
+      this._historygestion.initializesLastHistoryId(data[0].url_video_url);
+    });
+
     //Load youtube iframe api
     if (!this.apiLoaded) {
       const tag = document.createElement('script');
@@ -42,11 +45,8 @@ export class VideoviewComponent {
     }
   }
 
-  //Need to update full url and video id when histories is updated
-
   //When clicking on the star button below the video player, add the current played video to bookmarks
-  addFavourite(event:Event): void {
-    this._favouritegestion.addToFavourite(this.fullURL).subscribe(data => data);
-    //window.location.reload();
+  addFavourite(event: Event): void {
+    this._favouritegestion.addToFavourite("https://www.youtube.com/watch?v=" + this.videoId).subscribe(data => data);
   }
 }

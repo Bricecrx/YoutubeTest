@@ -1,7 +1,7 @@
 import { Component, NgIterable, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UrlgestionService } from '../urlgestion.service';
-import { HistorykeepingupdateService } from '../historykeepingupdate.service';
+import { HistorygestionService } from '../historygestion.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -12,12 +12,12 @@ export class SearchbarComponent {
   //Form group used to get information from html page
   videoURL: FormGroup = new FormGroup({ url: new FormControl() });
   //List of all urls already used and stored in database
-  urls: {url_video_url : string}[] = new Array();;
+  urls: { url_video_url: string }[] = new Array();;
   //Error message if link is not a Youtube classic link 
-  errorMessage : string = "";
+  errorMessage: string = "";
 
   //Initializes services and variables
-  constructor(private _urlgestion: UrlgestionService, private _historylist : HistorykeepingupdateService) {
+  constructor(private _urlgestion: UrlgestionService, private _historygestion: HistorygestionService) {
   }
 
   //On loading, get all urls stored in database and initializes the formgroup
@@ -37,6 +37,8 @@ export class SearchbarComponent {
     let urlValue = this.videoURL.value.url;
     //Proceed with the addition of url if the link seems valid
     if (/https:\/\/www\.youtube\.com\/watch\?v\=.+/.test(urlValue)) {
+      //If precedent url was not valid, we reset the value of error message
+      this.errorMessage = '';
       //Verify if value is not already in dB
       let isAlreadyInDB = false;
       for (let u of this.urls) {
@@ -52,9 +54,10 @@ export class SearchbarComponent {
         this._urlgestion.addURL(urlValue).subscribe(data => data);
       }
       //Then add submission to history
-      this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => this._historylist.updateHistories(data[0]));
-      //Refresh page
-      window.location.reload();
+      this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => {
+        this._historygestion.addHistories(data[0]);
+        this._historygestion.replaceLastHistoryId(data[0].url_video_url);
+      });
     }
     //else display an error message
     else {

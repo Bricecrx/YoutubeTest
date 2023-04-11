@@ -35,13 +35,6 @@ export class FavouritegestionService {
     return this._httpClient.post(this._serverURL + "/findAllFavourites", theObject)
   }
 
-  //Send a request to the servor in order to count the number of bookmarks
-  countFavourites(): Observable<any> {
-    //We use an empty object
-    var theObject = {};
-    return this._httpClient.post(this._serverURL + "/countFavourites", theObject)
-  }
-
   //Send a request to the servor in order to delete a bookmark
   deleteBookmark(url : string): Observable<any> {
     //Updating subscription
