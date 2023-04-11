@@ -14,8 +14,8 @@ export class UrlgestionService {
 
   //Send a request to the servor in order to get urls (no arguments needed)
   findallURL(): Observable<any> {
-    //We use a crappy object
-    var theObject = {"ok" : 0};
+    //We use an empty object
+    var theObject = {};
     return this._httpClient.post(this._serverURL + "/geturls", theObject)
   }
 

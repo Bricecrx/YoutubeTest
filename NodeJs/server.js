@@ -70,7 +70,7 @@ app.post("/addurlhistory", function (req, res) {
   var timestamp = req.body.timestamp;
   var sqlRequest = "INSERT INTO url_history (url_history_time, url_video_url)"
     + "VALUES (to_timestamp($2 / 1000.0), $1)"
-    + " RETURNING url_history_id";
+    + " RETURNING *";
   values = [url, timestamp];
   getSQLResult(req, res, sqlRequest, values);
 });

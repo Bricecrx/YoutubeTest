@@ -14,8 +14,8 @@ export class HistorygestionService {
 
   //Send a request to get the last 10 addings to the history table
   findAllHistoriesLimit10(): Observable<any> {
-    //We use a crappy object
-    var theObject = {"ok" : 0};
+    //We use an empty object
+    var theObject = {};
     return this._httpClient.post(this._serverURL + "/findAllHistoriesLimit10", theObject)
   }
 }

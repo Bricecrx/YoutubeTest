@@ -14,8 +14,8 @@ export class PlaylasthistoryService {
 
   //Send a request to servor in order to get the last url added to history
   findlastURLFromHistory(): Observable<any> {
-    //We use a crappy object
-    var theObject = {"ok" : 0};
+    //We use an empty object
+    var theObject = {};
     return this._httpClient.post(this._serverURL + "/getlasturlfromhistory", theObject)
   }
 }

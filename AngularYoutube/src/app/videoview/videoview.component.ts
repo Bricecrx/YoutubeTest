@@ -1,4 +1,4 @@
-import { Component, NgIterable } from '@angular/core';
+import { Component, NgIterable, Input } from '@angular/core';
 import { PlaylasthistoryService } from '../playlasthistory.service';
 import { FavouritegestionService } from '../favouritegestion.service';
 
@@ -11,17 +11,14 @@ export class VideoviewComponent {
   //Boolean checking if the module allowing to play Youtube video by URL is activated
   apiLoaded = false;
   //url of the video to play in full form
-  fullURL = '';
+  fullURL: string = '';
   //id of the video to play (useful to play the video thanks to youtube iframe api)
-  videoId = '';
+  videoId: string = '';
   //The last url added to history (so the one the app has to play)
-  latesturl: NgIterable<any>;
+  latesturl: {url_video_url : string}[] = new Array();
 
   //Initializes services and variables
   constructor(private _playlasthistory: PlaylasthistoryService, private _favouritegestion: FavouritegestionService) {
-    this.videoId = '';
-    this.fullURL = '';
-    this.latesturl = new Array();
   }
 
   //On loading, search for the url of the video to play and enter it into the variable that 
@@ -29,13 +26,11 @@ export class VideoviewComponent {
   ngOnInit() {
     //Get latest url in history (so latest submitted) and copy it into variables
     this._playlasthistory.findlastURLFromHistory().subscribe(data => {
+      console.log(data);
       this.latesturl = data;
-      for (var late of this.latesturl) {
-        //save full url into a variable
-        this.fullURL = late.url_video_url;
+        this.fullURL = this.latesturl[0].url_video_url;
         //process to get id only : 
         this.videoId = this.fullURL.split("v=")[1];
-      }
     });
     
     //Load youtube iframe api
@@ -47,9 +42,11 @@ export class VideoviewComponent {
     }
   }
 
+  //Need to update full url and video id when histories is updated
+
   //When clicking on the star button below the video player, add the current played video to bookmarks
   addFavourite(event:Event): void {
     this._favouritegestion.addToFavourite(this.fullURL).subscribe(data => data);
-    window.location.reload();
+    //window.location.reload();
   }
 }
