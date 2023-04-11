@@ -30,4 +30,9 @@ To launch the application :
 2. Open a second terminal. Go to "AngularYoutube" folder. Use the command line "ng serve". 
 3. Open your browser and navigate to "http://localhost:4200/".
 
+To launch the application (after production) : 
+1. Open a first terminal. Go to "NodeJs" folder. Use the command line "npm start".
+2. Open a second terminal. Go to "AngularYoutube" folder. Use the command line "ng build --configuration production". 
+3. Use a module in order to serve the "dist" folder created and see the app in production mode (I use angular-http-server).
+
 It should be working.
