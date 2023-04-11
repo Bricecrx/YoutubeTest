@@ -87,6 +87,7 @@ button.custombtn {
 div > youtube-player > iframe {
 	display: block;
 	width: 100%;
+	border-radius: 10px;
   }
 
 input {
