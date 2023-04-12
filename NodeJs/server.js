@@ -54,6 +54,12 @@ app.post("/geturls", function (req, res) {
   getSQLResult(req, res, sqlRequest, values);
 });
 
+app.post("/geturls", function (req, res) {
+  var sqlRequest = "SELECT url_video_url FROM url_video";
+  var values = [];
+  getSQLResult(req, res, sqlRequest, values);
+});
+
 //Add a given url to the url_video table
 app.post("/addurl", function (req, res) {
   var url = req.body.url;
@@ -120,6 +126,10 @@ app.post("/findAllHistoriesLimit10", function (req, res) {
   var sqlRequest = "SELECT * FROM url_history ORDER BY url_history_time DESC LIMIT 10 ";
   var values = [];
   getSQLResult(req, res, sqlRequest, values);
+});
+
+app.get('/', (req, resp) => {
+  resp.send(`Congrats ! Your Node Express server is running on PORT 8000`);
 });
 
 // Must be LAST instruction of the file
