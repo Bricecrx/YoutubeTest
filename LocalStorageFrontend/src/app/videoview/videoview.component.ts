@@ -30,9 +30,8 @@ export class VideoviewComponent {
       this.videoId = data;
     });
     //Get latest url in history (so latest submitted) and copy it into variables
-    this._historygestion.findlastURLFromHistory().subscribe(data => {
-      this._historygestion.initializesLastHistoryId(data[0].url_video_url);
-    });
+    let storedhistories = this._historygestion.turnJsonIntoHistoriesArray(localStorage.getItem("histories"),);  
+    this._historygestion.initializesLastHistoryId(storedhistories[0].url_video_url);
 
     //Load youtube iframe api
     if (!this.apiLoaded) {
@@ -45,6 +44,6 @@ export class VideoviewComponent {
 
   //When clicking on the star button below the video player, add the current played video to bookmarks
   addFavourite(event: Event): void {
-    this._favouritegestion.addToFavourite("https://www.youtube.com/watch?v=" + this.videoId).subscribe(data => data);
+    this._favouritegestion.addToFavourite("https://www.youtube.com/watch?v=" + this.videoId);
   }
 }

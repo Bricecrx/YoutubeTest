@@ -1,6 +1,5 @@
 import { Component, NgIterable } from '@angular/core';
 import { FavouritegestionService } from '../favouritegestion.service';
-import { UrlgestionService } from '../urlgestion.service';
 import { Subscription } from 'rxjs';
 import { HistorygestionService } from '../historygestion.service';
 
@@ -15,7 +14,7 @@ export class BookmarksComponent {
   bookmarksSub: Subscription = new Subscription();
 
   //Initialize services and variables
-  constructor(private _favouritegestion: FavouritegestionService, private _urlgestion: UrlgestionService, private _historygestion: HistorygestionService) {
+  constructor(private _favouritegestion: FavouritegestionService, private _historygestion: HistorygestionService) {
 
   }
 
@@ -26,29 +25,27 @@ export class BookmarksComponent {
       this.bookmarks = data;
     });
     //Initialize list of all bookmarks
-    this._favouritegestion.findAllFavourites().subscribe(data => {
-      for (let dat of data) {
-        this._favouritegestion.addToFavourite(dat.url_video_url);
+    let storedfavourites = this._favouritegestion.turnJsonIntoFavouritesArray(localStorage.getItem("favourites"));
+      for (let storedfavourite of storedfavourites) {
+        this._favouritegestion.addToFavourite(storedfavourite);
       }
-    });
   }
 
   //Onclick of delete button near a bookmark, delete the bookmark from the list and reload webpage
   deleteBookmark(event: Event, bookmark: any) {
     let url = bookmark;
-    this._favouritegestion.deleteBookmark(url).subscribe(data => {
-    });
+    this._favouritegestion.deleteBookmark(url);
   }
 
   //Allows to play a video when clicking on the bookmark url
   joinFromBookmark(event: Event, bookmark: any) {
-    let url = bookmark;
-    this._urlgestion.addCurrentURLtoHistory(url).subscribe(data => {
-      this._historygestion.addHistories(data[0]);
-      this._historygestion.replaceLastHistoryId(data[0].url_video_url);
-    });
+    let urlValue = bookmark;
+    let theObject = { "url_history_time": this._historygestion.timestampConversion(new Date()), "url_video_url": urlValue };
+    this._historygestion.addHistories(theObject);
+    this._historygestion.replaceLastHistoryId(theObject.url_video_url);
   }
 
+  //Stop subscription when component destroyed
   ngOnDestroy() {
     this.bookmarksSub.unsubscribe();
   }

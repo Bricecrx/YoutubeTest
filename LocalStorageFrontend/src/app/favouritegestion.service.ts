@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -8,42 +7,46 @@ import { Observable, of } from 'rxjs';
 export class FavouritegestionService {
   //Gets to the emplacement of the servor
   private _serverURL = 'http://localhost:8000';
-
+  //Frontend list of favourites that will serve for all components of the app
   private _favourites$ : string[] = new Array();
-
   public favourites: Observable<any> = of(this._favourites$);
 
   //Empty constructor
-  constructor(private _httpClient: HttpClient) { }
+  constructor() { }
 
-  //Send a request to the servor in order to add the url in argument to favourites
-  addToFavourite(url : string): Observable<any> {
-    //Push to list if not already
+  //Add a favourite to our list if it is not already in + update local storage
+  addToFavourite(url : string) {
+    //Push to list if not already in
     const index = this._favourites$.indexOf(url, 0);
       if (index === -1) {
         this._favourites$.push(url);
       }
-    //Update dB
-    var theObject = {"url" : url};
-    return this._httpClient.post(this._serverURL + "/addToFavourite", theObject)
+    //Update Local Storage
+    localStorage.setItem("favourites", JSON.stringify(this._favourites$));
   }
 
-  //Send a request to the servor in order to find all favourites
-  findAllFavourites(): Observable<any> {
-    //We use an empty object
-    var theObject = {};
-    return this._httpClient.post(this._serverURL + "/findAllFavourites", theObject)
-  }
-
-  //Send a request to the servor in order to delete a bookmark
-  deleteBookmark(url : string): Observable<any> {
+  //Delete a bookmark from our list + update local storage
+  deleteBookmark(url : string){
     //Updating subscription
     const index = this._favourites$.indexOf(url, 0);
       if (index > -1) {
         this._favourites$.splice(index, 1);
       }
-    //Updating dB
-    var theObject = {"url" : url};
-    return this._httpClient.post(this._serverURL + "/deleteBookmark", theObject)
+    //Updating localStorage
+    localStorage.setItem("favourites", JSON.stringify(this._favourites$));
+  }
+
+  //Turn the string data got when using local storage to a usable favourite array
+  public turnJsonIntoFavouritesArray(jsonData : string | null) : string[] {
+    //If data is not null, convert into array and return
+    if (jsonData !== null) {
+      let array = JSON.parse(jsonData);
+      return array;
+    }
+    //Else, return empty array + warn in the console
+    else {
+      console.log("The argument given was null.");
+      return new Array();
+    }
   }
 }
