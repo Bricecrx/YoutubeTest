@@ -26,8 +26,39 @@ export class HistorygestionService {
     if (this._histories$.length > 10) {
       this._histories$.pop();
     }
-    //Update local storage
-    localStorage.setItem("histories", JSON.stringify(this._histories$));
+    //Get info from IndexedDB (initialization)
+    let db: IDBDatabase;
+    let storedhistories: any[] = new Array();
+    // Let us open our database
+    const request = indexedDB.open("YoutubeIndexedDB", 8);
+
+    //Waiting for request result
+    request.onerror = (event) => {
+      console.log("Error : we could not open database.");
+    };
+
+    request.onsuccess = (event: any) => {
+      console.log("Database opened");
+      //Getting the db
+      db = event.target.result;
+
+      const transaction = db.transaction("histories", "readwrite");
+      const objectStore = transaction.objectStore("histories");
+      const request2 = objectStore.add(history);
+      request2.onerror = (event) => {
+        console.log("Error : couldn't add this history entry.");
+      };
+      request2.onsuccess = (event) => {
+        console.log("History entry well added");
+      };
+
+      //Handling errors
+      db.onerror = (event: any) => {
+        // Generic error handler for all errors targeted at this database's
+        // requests!
+        console.error(`Database error: ${event.target.errorCode}`);
+      };
+    };
   }
 
   //Same function than before but uses push/shift and not unshift/pop (otherwise the history list is inverted at each initialization)
@@ -37,8 +68,6 @@ export class HistorygestionService {
     if (this._histories$.length > 10) {
       this._histories$.shift();
     }
-    //Update local storage
-    localStorage.setItem("histories", JSON.stringify(this._histories$));
   }
 
   //Replaces the value of lasthistoryid thanks to the url corresponding to it
@@ -52,20 +81,6 @@ export class HistorygestionService {
   //Initializes (so no pop) the value of lasthistoryid thanks to the url corresponding to it
   public initializesLastHistoryId(fullURL: string) {
     this._lastHistoryId$.push(fullURL.split("v=")[1]);
-  }
-
-  //Turn the string data got when using local storage to a usable history array
-  public turnJsonIntoHistoriesArray(jsonData : string | null) : {url_history_time: string, url_video_url: string }[] {
-    //If data is not null, convert into array and return
-    if (jsonData !== null) {
-      let array = JSON.parse(jsonData);
-      return array;
-    }
-    //Else, return empty array + warn in the console
-    else {
-      console.log("History : The argument given was null.");
-      return new Array();
-    }
   }
 
   //Convert the current date into the timestamp format to be displayed

@@ -29,9 +29,40 @@ export class VideoviewComponent {
     this.videoIdSub = this._historygestion.lastHistoryId.subscribe((data) => {
       this.videoId = data;
     });
-    //Get latest url in history (so latest submitted) and copy it into variables
-    let storedhistories = this._historygestion.turnJsonIntoHistoriesArray(localStorage.getItem("histories"),);  
-    this._historygestion.initializesLastHistoryId(storedhistories[0].url_video_url);
+    //Get info from IndexedDB (initialization)
+    let db: IDBDatabase;
+    let storedhistories: any[] = new Array();
+    // Let us open our database
+    const request = indexedDB.open("YoutubeIndexedDB", 8);
+
+    //Waiting for request result
+    request.onerror = (event) => {
+      console.log("Error : we could not open database.");
+    };
+
+    request.onsuccess = (event: any) => {
+      console.log("Database opened");
+      //Getting the db
+      db = event.target.result;
+
+      const transaction = db.transaction("histories", "readwrite");
+      const objectStore = transaction.objectStore("histories");
+      const request2 = objectStore.getAll();
+      request2.onerror = (event) => {
+        console.log("Error : couldn't find last history entry.");
+      };
+      request2.onsuccess = (event) => {
+        storedhistories = request2.result;
+        this._historygestion.initializesLastHistoryId(storedhistories[storedhistories.length-1].url_video_url);
+      };
+
+      //Handling errors
+      db.onerror = (event: any) => {
+        // Generic error handler for all errors targeted at this database's
+        // requests!
+        console.error(`Database error: ${event.target.errorCode}`);
+      };
+    };
 
     //Load youtube iframe api
     if (!this.apiLoaded) {

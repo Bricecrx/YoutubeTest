@@ -15,7 +15,6 @@ export class BookmarksComponent {
 
   //Initialize services and variables
   constructor(private _favouritegestion: FavouritegestionService, private _historygestion: HistorygestionService) {
-
   }
 
   //On init, gives good values to variables thanks to services
@@ -24,11 +23,43 @@ export class BookmarksComponent {
     this.bookmarksSub = this._favouritegestion.favourites.subscribe((data) => {
       this.bookmarks = data;
     });
-    //Initialize list of all bookmarks
-    let storedfavourites = this._favouritegestion.turnJsonIntoFavouritesArray(localStorage.getItem("favourites"));
-      for (let storedfavourite of storedfavourites) {
-        this._favouritegestion.addToFavourite(storedfavourite);
-      }
+    //Get info from IndexedDB
+    let db: IDBDatabase;
+    let storedfavourites: any[] = new Array();
+    // Let us open our database
+    const request = indexedDB.open("YoutubeIndexedDB", 8);
+
+    //Waiting for request result
+    request.onerror = (event) => {
+      console.log("Error : we could not open database.");
+    };
+
+    request.onsuccess = (event: any) => {
+      console.log("Database opened");
+      //Getting the db
+      db = event.target.result;
+
+      const transaction = db.transaction("bookmarks", "readwrite");
+      const objectStore = transaction.objectStore("bookmarks");
+      const request2 = objectStore.getAll();
+      request2.onerror = (event) => {
+        console.log("Error : couldn't get from bookmarks.");
+      };
+      request2.onsuccess = (event) => {
+        storedfavourites = request2.result;
+        //Initializes list of data
+        for (let storedfavourite of storedfavourites) {
+          this._favouritegestion.initializeFavourite(storedfavourite.url_video_url);
+        }
+      };
+
+      //Handling errors
+      db.onerror = (event: any) => {
+        // Generic error handler for all errors targeted at this database's
+        // requests!
+        console.error(`Database error: ${event.target.errorCode}`);
+      };
+    };
   }
 
   //Onclick of delete button near a bookmark, delete the bookmark from the list and reload webpage

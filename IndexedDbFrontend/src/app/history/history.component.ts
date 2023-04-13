@@ -18,11 +18,43 @@ export class HistoryComponent {
 
   //On loading, search for the last 10 entries to the history table and gives value to entry
   ngOnInit() {
-    //Initializes our frontend list with local storage datas
-    let storedhistories = this._historygestion.turnJsonIntoHistoriesArray(localStorage.getItem("histories"),);
-    for (let storedhistory of storedhistories) {
-      this._historygestion.initializesHistories(storedhistory);
-    }
+    //Get info from IndexedDB (initialization)
+    let db: IDBDatabase;
+    let storedhistories: any[] = new Array();
+    // Let us open our database
+    const request = indexedDB.open("YoutubeIndexedDB", 8);
+
+    //Waiting for request result
+    request.onerror = (event) => {
+      console.log("Error : we could not open database.");
+    };
+
+    request.onsuccess = (event: any) => {
+      console.log("Database opened");
+      //Getting the db
+      db = event.target.result;
+
+      const transaction = db.transaction("histories", "readwrite");
+      const objectStore = transaction.objectStore("histories");
+      const request2 = objectStore.getAll();
+      request2.onerror = (event) => {
+        console.log("Error : couldn't get from histories.");
+      };
+      request2.onsuccess = (event) => {
+        storedhistories = request2.result;
+        //Initializes list of data
+        for (let storedhistory of storedhistories) {
+          this._historygestion.initializesHistories(storedhistory);
+        }
+      };
+
+      //Handling errors
+      db.onerror = (event: any) => {
+        // Generic error handler for all errors targeted at this database's
+        // requests!
+        console.error(`Database error: ${event.target.errorCode}`);
+      };
+    };
     //Link service to our display list
     this.historySub = this._historygestion.histories.subscribe((data) => {
       this.histories = data;
