@@ -51,13 +51,23 @@ export class SearchbarComponent {
       }
       //If it is not, add it to dB
       if (!isAlreadyInDB) {
-        this._urlgestion.addURL(urlValue).subscribe(data => data);
+        this._urlgestion.addURL(urlValue).subscribe(data => {
+          //Then add submission to history
+          this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => {
+            this._historygestion.addHistories(data[0]);
+            this._historygestion.replaceLastHistoryId(data[0].url_video_url);
+          });
+        });
       }
-      //Then add submission to history
-      this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => {
-        this._historygestion.addHistories(data[0]);
-        this._historygestion.replaceLastHistoryId(data[0].url_video_url);
-      });
+      else {
+        //Just add to history then
+        //Then add submission to history
+        this._urlgestion.addCurrentURLtoHistory(urlValue).subscribe(data => {
+          this._historygestion.addHistories(data[0]);
+          this._historygestion.replaceLastHistoryId(data[0].url_video_url);
+        });
+      }
+
     }
     //else display an error message
     else {

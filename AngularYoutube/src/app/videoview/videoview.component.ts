@@ -27,12 +27,10 @@ export class VideoviewComponent {
   ngOnInit() {
     //Get the latest history submission thanks to subscribtion and service
     this.videoIdSub = this._historygestion.lastHistoryId.subscribe((data) => {
-      console.log(data);
       this.videoId = data;
     });
     //Get latest url in history (so latest submitted) and copy it into variables
     this._historygestion.findlastURLFromHistory().subscribe(data => {
-      console.log(data[0].url_video_url);
       this._historygestion.initializesLastHistoryId(data[0].url_video_url);
     });
 

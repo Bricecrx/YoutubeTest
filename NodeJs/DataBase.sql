@@ -1,5 +1,6 @@
-CREATE DATABASE YoutubeTest;
-GRANT ALL PRIVILEGES ON DATABASE "YoutubeTest" to postgres;
+CREATE DATABASE youtubetest;
+\c youtubetest;
+GRANT ALL PRIVILEGES ON DATABASE "youtubetest" to postgres;
 
 CREATE TABLE public.url_video (
                 url_video_url VARCHAR NOT NULL,
@@ -26,3 +27,9 @@ REFERENCES public.url_video (url_video_url)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
+
+INSERT INTO url_video (url_video_url, url_video_bookmark)
+VALUES ('https://www.youtube.com/watch?v=BJL3z4c0F70', true);
+
+INSERT INTO url_history (url_history_time, url_video_url)
+VALUES (current_timestamp(3), 'https://www.youtube.com/watch?v=BJL3z4c0F70');

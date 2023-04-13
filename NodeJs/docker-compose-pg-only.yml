@@ -1,0 +1,42 @@
+version: '3.3'
+services:
+  postgredb:
+    container_name: bricecrx-youtubetest-db-backend
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./DataBase.sql:/docker-entrypoint-initdb.d/DataBase.sql
+    # networks: 
+    #   - base_network
+    ports:
+      - "5432:5432"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
+  
+  web:
+    container_name: bricecrx-nodejs-backend
+    build: .
+    command: npm start
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgredb
+    environment:
+      NETWORK_IP_ADRESS: 10.5.0.5
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.6
+  
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+
+      

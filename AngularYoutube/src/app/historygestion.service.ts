@@ -9,13 +9,13 @@ export class HistorygestionService {
   //Gets to the emplacement of the servor
   private _serverURL = 'http://localhost:8000';
 
-  private _histories$ : { url_history_id: number, url_history_time: string, url_video_url: string }[] = new Array();
+  private _histories$: { url_history_id: number, url_history_time: string, url_video_url: string }[] = new Array();
 
-  public histories : Observable<any> = of(this._histories$);
+  public histories: Observable<any> = of(this._histories$);
 
-  private _lastHistoryId$ : string[] = new Array();
-  
-  public lastHistoryId : Observable<any> = of(this._lastHistoryId$);
+  private _lastHistoryId$: string[] = new Array();
+
+  public lastHistoryId: Observable<any> = of(this._lastHistoryId$);
 
   //Empty constructor
   constructor(private _httpClient: HttpClient) { }
@@ -34,18 +34,20 @@ export class HistorygestionService {
     return this._httpClient.post(this._serverURL + "/getlasturlfromhistory", theObject)
   }
 
-  public addFirstHistories(history : { url_history_id: number, url_history_time: string, url_video_url: string }) {
+  public addFirstHistories(history: { url_history_id: number, url_history_time: string, url_video_url: string }) {
     history.url_history_time = history.url_history_time.split("Z")[0].split("T")[0] + " " + history.url_history_time.split("Z")[0].split("T")[1];
     this._histories$.push(history);
   }
 
-  public addHistories(history : { url_history_id: number, url_history_time: string, url_video_url: string }) {
+  public addHistories(history: { url_history_id: number, url_history_time: string, url_video_url: string }) {
     history.url_history_time = history.url_history_time.split("Z")[0].split("T")[0] + " " + history.url_history_time.split("Z")[0].split("T")[1];
     this._histories$.unshift(history);
-    this._histories$.pop();
+    if (this._histories$.length > 10) {
+      this._histories$.pop();
+    }
   }
 
-  public replaceLastHistoryId(fullURL : string) {
+  public replaceLastHistoryId(fullURL: string) {
     this._lastHistoryId$.unshift(fullURL.split("v=")[1]);
     this._lastHistoryId$.pop();
   }

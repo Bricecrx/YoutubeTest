@@ -3,7 +3,8 @@ const pg = require("pg");
 const app = express();
 
 //Connection to dB
-var conString = 'postgres://admin:admin@localhost:5432/YoutubeTest';
+var conString = "postgres://postgres:postgres@10.5.0.5:5432/youtubetest" ;
+// var conString = 'postgres://postgres:postgres@localhost/YoutubeTest';
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -22,6 +23,7 @@ function getSQLResult(req, res, sqlRequest, values) {
   client.connect(function (err) {
     if (err) {
       // Cannot connect
+      console.error(process.env.NETWORK_IP_ADRESS);
       console.error('cannot connect to postgres', err);
       res.status(500).end('Database connection error!');
     } else {
