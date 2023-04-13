@@ -1,0 +1,31 @@
+<div class="py-1">
+    <div class="container-fluid text-center">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="">Bookmarks</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                Number of bookmarks : {{bookmarks.length}}
+            </div>
+        </div>
+        <div class="row header text-center">
+            <div class="col-md-8 header">
+                <td class="header">URL</td>
+            </div>
+            <div class="col-md-4 header"></div>
+        </div>
+        <div class="row element" *ngFor="let bookmark of bookmarks">
+            <div class="col-md-11">
+                <td (click)="joinFromBookmark($event, bookmark)">{{ bookmark}}</td>
+            </div>
+            <div class="col-md-1">
+                <td class="text-center">
+                    <button name="edit" class="btn" (click)="deleteBookmark($event, bookmark)"><img
+                            src="assets/icons/delete.png" alt="delete" class="icon" /></button>
+                </td>
+            </div>
+        </div>
+    </div>
+</div>
