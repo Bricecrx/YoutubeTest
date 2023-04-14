@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +9,11 @@ export class FavouritegestionService {
   //Gets to the emplacement of the servor
   private _serverURL = 'http://localhost:8000';
 
-  private _favourites$ : string[] = new Array();
+  favouriteList : string[] = new Array();
 
-  public favourites: Observable<any> = of(this._favourites$);
+  private _favourites$ = new BehaviorSubject<any>({});
+
+  public favourites = this._favourites$.asObservable();
 
   //Empty constructor
   constructor(private _httpClient: HttpClient) { }
@@ -19,9 +21,10 @@ export class FavouritegestionService {
   //Send a request to the servor in order to add the url in argument to favourites
   addToFavourite(url : string): Observable<any> {
     //Push to list if not already
-    const index = this._favourites$.indexOf(url, 0);
+    const index = this.favouriteList.indexOf(url, 0);
       if (index === -1) {
-        this._favourites$.push(url);
+        this.favouriteList.push(url);
+        this._favourites$.next(this.favouriteList);
       }
     //Update dB
     var theObject = {"url" : url};
@@ -38,9 +41,10 @@ export class FavouritegestionService {
   //Send a request to the servor in order to delete a bookmark
   deleteBookmark(url : string): Observable<any> {
     //Updating subscription
-    const index = this._favourites$.indexOf(url, 0);
+    const index = this.favouriteList.indexOf(url, 0);
       if (index > -1) {
-        this._favourites$.splice(index, 1);
+        this.favouriteList.splice(index, 1);
+        this._favourites$.next(this.favouriteList);
       }
     //Updating dB
     var theObject = {"url" : url};

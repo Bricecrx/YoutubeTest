@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +9,17 @@ export class HistorygestionService {
   //Gets to the emplacement of the servor
   private _serverURL = 'http://localhost:8000';
 
-  private _histories$: { url_history_id: number, url_history_time: string, url_video_url: string }[] = new Array();
+  private historiesList: { url_history_id: number, url_history_time: string, url_video_url: string }[] = new Array();
+  
+  private _histories$ = new BehaviorSubject<any>({});
 
-  public histories: Observable<any> = of(this._histories$);
+  public histories = this._histories$.asObservable();
 
-  private _lastHistoryId$: string[] = new Array();
+  private lastHistoryIdList: string[] = new Array();
+  
+  private _lastHistoryId$ = new BehaviorSubject<any>({});
 
-  public lastHistoryId: Observable<any> = of(this._lastHistoryId$);
+  public lastHistoryId = this._lastHistoryId$.asObservable();
 
   //Empty constructor
   constructor(private _httpClient: HttpClient) { }
@@ -36,23 +40,27 @@ export class HistorygestionService {
 
   public addFirstHistories(history: { url_history_id: number, url_history_time: string, url_video_url: string }) {
     history.url_history_time = history.url_history_time.split("Z")[0].split("T")[0] + " " + history.url_history_time.split("Z")[0].split("T")[1];
-    this._histories$.push(history);
+    this.historiesList.push(history);
+    this._histories$.next(this.historiesList);
   }
 
   public addHistories(history: { url_history_id: number, url_history_time: string, url_video_url: string }) {
     history.url_history_time = history.url_history_time.split("Z")[0].split("T")[0] + " " + history.url_history_time.split("Z")[0].split("T")[1];
-    this._histories$.unshift(history);
-    if (this._histories$.length > 10) {
-      this._histories$.pop();
+    this.historiesList.unshift(history);
+    if (this.historiesList.length > 10) {
+      this.historiesList.pop();
     }
+    this._histories$.next(this.historiesList);
   }
 
   public replaceLastHistoryId(fullURL: string) {
-    this._lastHistoryId$.unshift(fullURL.split("v=")[1]);
-    this._lastHistoryId$.pop();
+    this.lastHistoryIdList.unshift(fullURL.split("v=")[1]);
+    this.lastHistoryIdList.pop();
+    this._lastHistoryId$.next(this.lastHistoryIdList);
   }
 
   public initializesLastHistoryId(fullURL: string) {
-    this._lastHistoryId$.push(fullURL.split("v=")[1]);
+    this.lastHistoryIdList.push(fullURL.split("v=")[1]);
+    this._lastHistoryId$.next(this.lastHistoryIdList);
   }
 }
