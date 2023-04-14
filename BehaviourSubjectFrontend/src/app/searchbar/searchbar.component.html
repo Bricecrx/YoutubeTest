@@ -1,0 +1,32 @@
+<div class="py-1">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="">Search Bar</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form (ngSubmit)="playVideo()">
+                    <div [formGroup]="videoURL">
+                        <div class="form-group row">
+                            <label for="urlLabel" class="col-1 col-form-label text-right">URL</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="inputurl" placeholder="enter video url here" name="url"
+                                    required="required" formControlName="url">
+                            </div>
+                            <div class="col-2 text-left">
+                                <button type="submit" class="custombtn btn btn-success">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-12">
+                <td class="error">{{ errorMessage }}</td>
+            </div>
+        </div>
+    </div>
+</div>
