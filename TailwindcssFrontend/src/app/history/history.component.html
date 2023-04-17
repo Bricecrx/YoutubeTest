@@ -1,0 +1,25 @@
+<div class="py-1">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="">History</h2>
+            </div>
+        </div>
+        <div class="row header text-center">
+            <div class="col-md-8 header">
+                <td class="header">URL</td>
+            </div>
+            <div class="col-md-4 header">
+                <td class="header">timestamp</td>
+            </div>
+        </div>
+        <div class="row element" *ngFor="let history of histories">
+            <div class="col-md-8">
+                <td (click)="joinFromHistory($event, history)">{{ history.url_video_url}}</td>
+            </div>
+            <div class="col-md-4">
+                <td>{{ history.url_history_time }}</td>
+            </div>
+        </div>
+    </div>
+</div>
